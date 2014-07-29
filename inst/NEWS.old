@@ -1,0 +1,82 @@
+1.0.0 
+
+Object creation at user level changed so that GenoSet, BAFSet, and CNSet functions all 
+call an internal input checker and object generator function initGenoSet rather than having
+ GenoSet() create all 3 objects using a "type" arg.
+
+Segmentation functions now return DataFrame objects containing one Rle vector per sample. 
+These give the same effect of having big matrices with repeated data matching the dimensions 
+of the un-segmented data, but are considerably smaller.  For a dataset of ~1k SNP6 arrays, 
+the data in the lrr matrix is about 0.8% of the size using this strategy. In all regards, 
+these can be treated as just another matrix in assayData, but in special cases it is useful to 
+take advantage of the data in its runValue and runLength form.
+
+New methods defined for DataFrame to allow usage as assayData element:
+    colMeans
+    annotatedDataFrameFrom
+
+Methods that get genome information from a GenoSet now work on RangedData too.  RangedData and 
+GenoSet now share some API to make this easier. RangedData gets chr and pos, GenoSet gets names, 
+ranges, and elementLengths. Now chrInfo, chrIndices, genoPos, etc. can work on either object type.
+
+pos and genoPos now defined as floor of mean of start and end positions.
+
+1.0.6
+Substantial speed improvements for boundingIndices() and rangeSampleMeans.
+
+1.1.7
+Added loadGC function to get local GC content and version bump for bioC2.9
+
+1.1.8
+genomeOrder becomes toGenomeOrder which now takes and returns a GenoSet or RangedData rather than just returning the index to reorder such objects.  locData<- now reorders the whole GenoSet and assures that all of the featureNames match.
+
+1.1.9
+Added support for big.matrix objects from bigmemory as assayDataElements
+
+1.1.10
+***API Change*** list operator "[[" no longer used to subset by chromosome. It reverts back to extracting a column from pData like other eSets. chrIndices gains a "chr" argument that serves as a fast way to get the indices needed to subset rows by chromosome.
+
+1.1.11
+***API Addition*** "k" argument to "[" can be used to subset from a specific assayDataElement.  Numeric and character "k"s are allowed.  assayDataElement(ds,k)[i,j] is the same as ds[i,j,k], but "i" can be a RangedData or RangesList.
+
+1.1.12
+assayDataElements can be integer matrices with levels that will serve as factors for now.  Please see the help for convertToBigMatrix.
+
+1.4.9
+*** API Changes *** segTable on a DataFrame of Rle now has a "stack" argument to rbind the resulting list of data.frames of per-sample segments into on giant data.frame.  A "Sample" column will be added to separate samples.  The list of individual data.frames no longer has an "ID" column.  Also, some refactoring to speed up this method.
+
+1.4.10
+segTable for Rle now optionally takes chrIndices table, start and stop from locData for speed. segTable for DataFrame uses this trick. Much faster.  About 95% time reduction for a large dataset on a large chip.
+
+1.4.19
+*Minor API change*  Rarely used (by me) method, orderedChrs, gone.  It's just chrOrder(chrNames(x)) anyway. 'names' on GenoSet depricated.  chrNames gives universal way to get chromosome names (i.e. names, seqlevels) for GenoSet, RangedData, GRanges.
+
+1.7.7
+genoPlot supports fast zooming into a chromosome with the 'xlim' arg.  Subsets before plotting, which is much faster. Bugfix for odd issues with ... args and genoPlot on an Rle.
+
+1.7.8
+*Minor API change* genoPlot now takes numeric or Rle data as "y" rather than an index into the assayDataElement named in "element".  Backwards compatible with a warning about the old usage being deprecated. RangedData or GRanges also now valid as "x".
+
+1.9.8
+GRanges everywhere!  GenoSet now supports GRanges in the locData slot.  All functions that take RangedData now also take GRanges.  I have unified the API for GRanges, RangedData, and GenoSet to the point that GenoSet classes and the functions in the package are agnostic to the type of range object.  I have not, however, fixed the contentious issue of using the "$" operator with GRanges to access elementMetadata.
+
+1.9.10
+Subsetting by location now only with GRanges and RangedData.  Dropped RangesList to avoid weird errors about the RangedDataOrRangesListOrGRanges class union.  Apparently the RangedDataOrGRanges class union is fine. I think RangesLists are not used often anyway.
+
+1.9.11
+GenoSet creation and featureNames<- no longer do make.names.
+
+1.9.12
+GenoSet creation and sampleNames<- no longer do make.names.
+
+1.11.8
+toGenomeOrder and isGenomeOrder for GRanges and RangedData now strict=TRUE by default, like for GenoSet
+
+1.11.9
+No more make.names on sampleNames in object initialization
+
+1.11.22
+CNSet and BAFSet are deprecated.  See help("genoset-deprecated")
+
+1.15.10
+CNSet and BAFSet are gone.

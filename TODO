@@ -1,0 +1,132 @@
+Add function to take match matrix from findOverlaps, subset a specified assayData matrix, and tapply a function on it, rowMeans in particular
+make method for cnSet where default matrix is cn, maybe also for bafSet where lrr is default DONE
+
+Looks like findOverlaps can not find the two snps spanning a range, so it would give different results to what my binary searches on pdl$probeset.info$pos were doing in the genomechip project.  To get the same effect I would have to convert the lrr matrix, for example, to segs and look for overlaps there, averaging segments if necessary.  The search would be crazy fast as there will be many fewer segs than probes, but making the RangedData of segs would take some time.  So, for doing LOTS of genes, this could be a big win (like for CARFOG). Could also add/update an SQLite DB of ranges with an RTree index, which was how I was planning to do CARFOG anyway. DONE
+
+precede() and follow() allow finding the Ranges that precede or follow a range, so I could find left and right bounds that way if necessary.  Will require looping over chrs as precede and follow are only defined for basic IRanges, not RangedDataLists.  Michael says that some of the work towards that exists, if I do precede or follow with multiple=TRUE, I will get a "RangesMatching" object.  If I have a list of those, a "RangesMatchingList", then I can do as.matrix on that to  get the proper offsets into the full set of ranges.  For example, comparing chr3 for two RangesLists, I might get a hit on the 3rd range of my target.  I want to take that 3 and add something to it to account for the ranges in chrs 1 and 2. DONE
+
+Actually, precede doesn't seem to want to use multiple=TRUE or select="all".  precede and follow are just calls to findInterval, so maybe resurrecting my binary.bound would be just as well.  If incoming data sorted on chr, start and incoming query ranges sorted on chr, start, could do all queries in one call if and save some time on search for right bound and subsequent left bounds  by never re-setting the sliding marker for the left side.  Could search on whole of pos(genoset) starting on first and last for chr.  Last of chr can be obtained with something like lasts = cumsum(sapply( pinfo(genoset), nrow)) and first is c(1,lasts[-length(lasts)]+1).  This would be easier than adding an offset to each returned index. DONE
+
+Doing my own smart binary.bound that saves time by doing the right end and subsequent left ends using the marker start position of the previous left end, in C, is still 5X slower (the C part) than just doing two findIntervals, and findInterval allows for unsorted starts, so I guess I'll go with that.  I have my binary.bound (in precede.test.R) down to about 3X the time of my binaryBound, which uses findInterval.  Almost all of binary.bound's time is in .C now. DONE
+
+findInterval with rightmost.closed takes the rightmost of a run of ties, which is OK since I won't be using it with ties in the positions.  Off right end still gets index of last of positions, so that is OK, off left end gets 0, so I'm making those 1. DONE
+
+Big time difference between binary.search and binarySearch (findInterval * 2) is making the positions integer or double.  is.na and is.unsorted taking a lot of time for findInterval too.  If incoming positions are integer (as they would be in a RangedData) as.double takes a huge amount of time.
+
+DONE
+
+Figure out a way to avoid nonsense sample names from breaking genoPlot.  Maybe check in sampleNames in generic and subset there, always plotting sample 1 in methods?
+
+use mclapply to do gcCorrect on each sample on a separate core rather than using lmFit? Would save the big t() twice, but would have to as.matrix(as.data.frame( <some list> ))  NO LONGER NEEDED
+
+###
+Try doing all final [ subsetting in my own method rather than subsetting pinfo and passing to eSet.  Would look something like
+
+##' @exportMethod "["
+setMethod("[", signature=signature(x="GenoSet",i="ANY",j="ANY"),
+          function(x,i,j,...,drop=FALSE) {
+            if ( ! missing(i) ) {
+              pinfo = x@pinfo[i,,drop=TRUE]
+              featureData = featureData(x)[i,]
+              if ( missing(j) ) {
+                assayData = subsetAssayData(assayData(x),i)
+              } else {
+                assayData = subsetAssayData(assayData(x),i,j)
+              }
+            } else {
+              featureData = featureData
+            }
+            if ( !missing(j) ) {
+              phenoData = phenoData(x)[j,]
+              protocolData = protocolData(x)[j,]
+            } else {
+              phenoData = phenoData(x)
+              protocolData = protocolData(x)
+            }
+            object = new(class(x), pinfo=pinfo, assayData=assayData, featureData=featureData, phenoData=phenoData, protocolData=protocolData, annotation=annotation(x), experimentData=experimentData(x))
+#            callNextMethod(x,i,j,...,drop=drop)
+          })
+
+
+
+# Mon 09-27-2010 - 15:57
+Another way to get copynumber per gene would be to operate on mat2segs results (1 row per segment/sample) for segmented data.  Could do as IRanges or dump to SQLite DB.  Data much smaller, would rarely have to average multiple data points per sample for a given gene.  Search only ~100 segs per sample * j samples, but big overhead for making list of segs.  Would have to kludge segs so that stop[i] was (start[i+1]-1) and first of each chr was 1 and end of each chr was length of chr.  Necessary to prevent genes from falling between segs or off of the ends.  Might be possible to add this as a table to the SQLite DB for, say, hgu133plus2.db at runtime.  Would be easier to do as SQL than in R.  Could also provide length of seg in same query.
+Would depend on mapping (e.g. hg18) match between gene db and GenoSet object.
+
+
+# Mon 09-27-2010 - 16:07
+Add mapping slot (character) to GenoSet, make required.  What to do with annotation ... no defined vocab
+and no DB for some chips.  Not really using now that loadGC has a generic file. Allow null using class that is a union of NULL and character?
+
+Done
+
+# Mon 09-27-2010 - 16:09
+make isGenomeOrder and genomeOrder methods, define on GenoSet and RangedData
+
+Done
+# Mon 09-27-2010 - 16:09
+Check that rownames of incoming RangedData cannot be NULL.
+
+Done
+
+# Mon 09-27-2010 - 16:24
+Change genoPlot to subset only pinfo when chr is not NULL.  Get pos and rownames.  Use rownames and sample to get data.  Make a list of ... and check for add=TRUE. Then plot or points passing on "..." rather than jumping back to more specific methods.  Add element arg to allow for arbitrary assayData element to be used for plotting.  Use CNSet and BAFSet methods only to set a few things like ylim and to pick the right assayData element.  Maybe put BAF plotting in a BAFPlot function then call GenoPlot directly with ylim and element set.
+
+Done
+# Tue 10-12-2010 - 15:24
+Change mat2segs so NAs taken out of each sample individually before rle.  baf will have a lot of NAs (for HOMs) and rle will make each of these its own segment.
+
+No longer relevant
+
+# Fri 10-15-2010 - 09:42
+Make handy wrappers to call gcCorrect and mat2segs on GenoSet objects
+
+No longer relevant
+
+# Mon 02-07-2011 - 09:53
+Update rangeSampleMeans, etc. to work on cases where start != stop.  pos and genoPos now defined as integer mean of start and end.
+
+
+# Sun 02-20-2011 - 11:25
+baf2mbaf should output DF of Rle.  DF need as.matrix method, and runCBS should as.matrix temp.data. Rle also needs density method. modeCenter needs a method on Rle where this would be used.  Need tests or these and modeCenter on matrix.
+
+gcCorrect should now NA rows of the matrix corresponding to NA gc values. subset arg should be used to ignore these rows. loadGC (now in gcContent package) should not subset out these rows.  Subsetting takes a whileand we don't necessarily want to subset ALL assayData elements. No longer necessary as NA gc data fixed.
+
+
+# Wed 07-20-2011 - 09:30
+boundingIndices should make it's return matrix internal and put dimnames on it.  Will do when I make a .Call version.
+Done
+
+
+# Mon 02-27-2012 - 11:25
+Allow GRanges as locData.  Will require chr, pos, chrIndices, chrInfo, asGenomeOrder, isGenomeOrder, elementLengths, uniqueChrs, orderedChrs probably others for GRanges.
+Will need to get rid of "names" methods as GRanges and RangedData use this for different things. Could use existing uniqueChrs, maybe just chrNames?
+chrInfo for GRanges would need to use its own genome info if available, otherwise max by chr as with RangedData.  Maybe chrLengths for each type then single chrInfo uses that?
+Maybe seqlengths for RangedData (GenoSet calls to its locData?)  Maybe then use seqnames rather than names for RangedData and GenoSet?
+Maybe rather than seqnames and ordered seqnames, just seqnames and the chrOrder function?  (should've called it orderChrNames) Ah, I meant seqlevels.  They're not levels ... 
+
+chr info getters done
+Need chrNames setter?
+Need rownames and x[i,] for GRanges
+loadGC will need to be fixed to work on GRanges too
+
+
+# Tue 04-17-2012 - 09:32
+Add zoom to genoPlot using subsetting (use xlim arg in genoset method, but subset rather than setting xlim. It's 10X faster for BigMatrix data on chr10.
+
+
+# Tue 04-17-2012 - 09:33
+Add full chr and zoomed chr pairs plots from CGPtools::plotPICNICByGene
+Maybe have vector of assayDataElementNames to plot in both plots?
+Move and generalize as much of plotPICNICbyGene as possible
+Maybe try gView before I get too far into zooming
+
+
+# Tue 06-04-2013 - 09:39
+I want to move in a direction where I could swap out eSet for SummarizedExperiment without anyone noticing.  So, I should try to avoid eSet API stuff like sampleNames.  It's funny that rownames and colnames exist for eSet, but are so much slower than featureNames and sampleNames.  Oh, they do dimnames and then subset.
+
+
+# Mon 04-28-2014 - 13:47
+Add viewMeans and viewSums for RleDataFrame, base on rangeSampleMeans.
+
+Coercion for RleDataFrame to matrix, with examples and section in class Rd.

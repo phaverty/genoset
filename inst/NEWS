@@ -1,0 +1,73 @@
+CHANGES IN VERSION 1.19.27
+--------------------------
+
+IMPROVEMENTS
+	o rangeMeans for numeric gets a na.rm argument and uses 50% less time for 
+	na.rm = FALSE ands 25% less time for na.rm=TRUE.
+
+CHANGES IN VERSION 1.19.7
+-------------------------
+
+NEW FEATURES
+
+	o The version introduces the rangeMeans family of functions, which are 
+	closely related to IRanges::viewMeans family of functions. These 
+	new functions take an RleDataFrame and an IRanges (or matrix) of row 
+	ranges and compute summary stats. These are useful for summaries like 
+	the average DNA copy number or coverage in a gene, by sample. These 
+	functions differ from view* in that they are more time efficient and 
+	they offer a 'simplify' argument to return a matrix, rather than a list.
+
+CHANGES IN VERSION 1.19.0
+-------------------------
+
+NEW FEATURES
+
+	o This version introduces the RleDataFrame class. This class extends 
+	SimpleRleList and DataFrame. It stores a collection of like-length 
+	Rle objects.  With the AtomicList features it behaves much like a 
+	matrix. For example, log2(x) - 1 works. We also have row and column sums 
+	and means. rangeSampleMeans functions like viewMeans.
+	This object can be used to store 
+	runs of data along the genome for multiple samples, like coverage or DNA 
+	copy number. It can be used as an assayDataElement in a genoset (or any 
+	eSet).
+
+	o segTable and segPairTable are dramatically faster. Stacking data.frames 
+	with segTable(RleDataFrame,stack=TRUE) argument is now instantaneous.
+
+DEPRECATED AND DEFUNCT
+
+	Previously we used a DataFrame for storing collections of Rle objects. 
+	This practice is now deprecated. Similarly, colMeans on a DataFrame is 
+	now deprecated.
+
+CHANGES IN VERSION 1.16.0
+-------------------------
+
+NEW FEATURES
+
+	o cn2lr now has methods for vector, matrix, and DataFrame (of Rle) and 
+	allows you to center your log2ratio values on 2 copies, or on a specified 
+	'ploidy' for your sample.
+
+DEPRECATED AND DEFUNCT
+
+	o The BAFSet and CNSet classes have moved from deprecated 
+	to defunct. These classes only added getter/setter methods 
+	for baf/lrr/cn. Since these only cover some possible 
+	assayDataElements, it is better to use x[i,j,k], where k is 
+	the name of an assayDataElement.
+	
+	o All RangedData-related things have now progressed to defunct. Please use 
+	GRanges for locData and everywhere else. Since the genoset package provides 
+	a common API for GenoSet, GRanges, and RangedData, I hope this will be a 
+	simple change for everyone.
+	
+	o sampleNames and featureNames are now *un-deprecated*.  Feel free to use 
+	them. They just call colnames and rownames, respectively. I have defined 
+	my own rownames and colnames functions. The eSet ones seem to do a lot of 
+	extra work, and the getter versions read from the first assayDataElement, 
+	rather than pData and fData. I changed to the latter, so BigMatrix 
+	assayDataElements will remain untouched until you really mean to access 
+	them.
