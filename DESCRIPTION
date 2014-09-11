@@ -2,7 +2,7 @@ Package: genoset
 Type: Package
 Title: Provides classes similar to ExpressionSet for copy number
     analysis
-Version: 1.19.31
+Version: 1.19.32
 Date: 2011-01-15
 Author: Peter M. Haverty
 Maintainer: Peter M. Haverty <phaverty@gene.com>
@@ -19,7 +19,7 @@ LazyLoad: yes
 Depends:
     R (>= 2.10),
     BiocGenerics (>= 0.11.3),
-    S4Vectors (>= 0.1.0),
+    S4Vectors (>= 0.2.3),
     Biobase (>= 2.15.1),
     IRanges,
     GenomeInfoDb (>= 1.1.3),
