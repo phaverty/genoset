@@ -9,9 +9,9 @@
 ##' Take output of CBS, make Rle representing all features in 'locs' ranges. CBS output contains
 ##' run length and run values for genomic segmetns, which could very directly be converted into a Rle.
 ##' However, as NA values are often removed, especially for mBAF data, these run lengths do not
-##' necessarily cover all features in every sample. Using the start and top positions of each segment 
+##' necessarily cover all features in every sample. Using the start and top positions of each segment
 ##' and the location of each feature, we can make a Rle that represents all features.
-##' 
+##'
 ##' @param segs data.frame of segments, formatted as output of segment function from DNAcopy package
 ##' @param locs GenomicRanges, like locData slot of a GenoSet
 ##' @return Rle with run lengths and run values covering all features in the data set.
@@ -124,7 +124,7 @@ setMethod("segTable", signature(object="Rle"), function(object,locs=NULL,chr.ind
 
   # Get union of all breakpoints in Rle and chromosomes
   object.ends = cumsum(runLength(object))
-  
+
   all.ends = sort.int(unique(c(chr.ind[,2],object.ends)))
   all.starts = c(1L,all.ends[-length(all.ends)]+1L)
   num.mark = (all.ends - all.starts) + 1L
@@ -179,8 +179,8 @@ setMethod("segTable", signature(object="DataFrame"), function(object,locs,factor
 ##'
 ##' Like segTable, but for two Rle objects. Takes a
 ##' pair of Rle or DataFrames with Rle
-##' columns and makes one or more data.frames with bounds of each new 
-##' segment.  Rle objects are broken up so that each resulting segment 
+##' columns and makes one or more data.frames with bounds of each new
+##' segment.  Rle objects are broken up so that each resulting segment
 ##' has one value from each Rle. For a DataFrame, the
 ##' argument \code{stack} combines all of the individual data.frames
 ##' into one large data.frame and adds a "Sample" column of sample ids.
@@ -228,7 +228,7 @@ setMethod("segPairTable", signature(x="Rle",y="Rle"), function(x,y,locs=NULL,chr
   # Get union of all breakpoints in two Rles and chromosomes
   x.ends = cumsum(runLength(x))
   y.ends = cumsum(runLength(y))
-  
+
   all.ends = sort.int(unique(c(chr.ind[,2],x.ends,y.ends)))
   all.starts = c(1L,all.ends[-length(all.ends)]+1L)
   num.mark = (all.ends - all.starts) + 1L
@@ -302,10 +302,10 @@ fixSegNAs <- function(x,max.na.run=3) {
 }
 
 ##' Utility function to run CBS's three functions on one or more samples
-##' 
+##'
 ##' Takes care of running CBS segmentation on one or more samples. Makes appropriate
 ##' input, smooths outliers, and segment
-##' 
+##'
 ##' @title Run CBS Segmentation
 ##' @aliases runCBS
 ##' @param data numeric matrix with continuous data in one or more columns
@@ -325,7 +325,7 @@ fixSegNAs <- function(x,max.na.run=3) {
 ##'     probe.names =  paste("p",1:30,sep="")
 ##'     ds = matrix(c(c(rep(5,20),rep(3,10)),c(rep(2,10),rep(7,10),rep(9,10))),ncol=2,dimnames=list(probe.names,sample.names))
 ##'     locs = GRanges(ranges=IRanges(start=c(1:20,1:10),width=1,names=probe.names),seqnames=paste("chr",c(rep(1,20),rep(2,10)),sep=""))
-##'   
+##'
 ##'     seg.rle.result = RleDataFrame( a1 = Rle(c(rep(5,20),rep(3,10))), a2 = Rle(c(rep(2,10),rep(7,10),rep(9,10))), row.names=probe.names )
 ##'     seg.list.result = list(
 ##'       a1 = data.frame( ID=rep("a1",2), chrom=factor(c("chr1","chr2")), loc.start=c(1,1), loc.end=c(20,10), num.mark=c(20,10), seg.mean=c(5,3), stringsAsFactors=FALSE),
@@ -343,7 +343,7 @@ runCBS <- function(data, locs, return.segs=FALSE, n.cores=1, smooth.region=2, ou
   loc.start = as.numeric(start(locs))
   loc.chr = chr(locs)
   presorted = isGenomeOrder(locs,strict=TRUE)
-  
+
   # mclapply over samples. cbs can loop over the columns of data, but want to use multiple forks
   if (n.cores > 1 && is.loaded("mc_fork", PACKAGE="parallel")) {
     mcLapply <- get('mclapply', envir=getNamespace('parallel'))
@@ -391,13 +391,13 @@ runCBS <- function(data, locs, return.segs=FALSE, n.cores=1, smooth.region=2, ou
 setGeneric("rangeSegMeanLength", function(range.gr,segs) standardGeneric("rangeSegMeanLength"))
 
 ##' @rdname rangeSegMeanLength-methods
-setMethod("rangeSegMeanLength", signature=signature(range.gr="GRanges", segs="list"), 
+setMethod("rangeSegMeanLength", signature=signature(range.gr="GRanges", segs="list"),
   function(range.gr, segs) {
     vapply(segs, function(x) { .rangeSegMeanLength(range.gr, x) }, numeric(length(range.gr)) )
   })
 
 ##' @rdname rangeSegMeanLength-methods
-setMethod("rangeSegMeanLength", signature=signature(range.gr="GRanges", segs="data.frame"), 
+setMethod("rangeSegMeanLength", signature=signature(range.gr="GRanges", segs="data.frame"),
   function(range.gr, segs) {
     .rangeSegMeanLength(range.gr, segs)
 })

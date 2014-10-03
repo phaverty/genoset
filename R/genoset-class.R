@@ -19,23 +19,22 @@
 ##' @seealso genoset-datasets GenoSet
 ##'
 ##' @importClassesFrom Biobase AnnotatedDataFrame AssayData eSet ExpressionSet MIAME Versioned VersionedBiobase
-##' @importClassesFrom IRanges DataFrame Rle
-##' @importClassesFrom GenomicRanges GRanges GenomicRanges GIntervalTree
+##' @importClassesFrom GenomicRanges GRanges GenomicRanges GIntervalTree DelegatingGenomicRanges
 ##'
 ##' @importMethodsFrom GenomicRanges names "names<-" length width
 ##' @importMethodsFrom Biobase annotation fData featureNames "featureNames<-" phenoData sampleNames "sampleNames<-"
 ##' @importMethodsFrom IRanges as.data.frame as.list as.matrix cbind colnames "colnames<-" elementLengths end findOverlaps gsub
-##' @importMethodsFrom IRanges intersect is.unsorted lapply levels mean nrow order paste ranges Rle rownames
-##' @importMethodsFrom IRanges "rownames<-" runLength runValue sapply space start unlist universe "universe<-" viewMeans Views
+##' @importMethodsFrom IRanges intersect lapply mean nrow order ranges rownames
 ##'
 ##' @importFrom Biobase assayDataElement assayDataElementNames assayDataElementReplace assayDataNew annotatedDataFrameFrom
 ##' @importFrom graphics abline axis axTicks box mtext plot.new plot.window points segments
-##' @importFrom IRanges DataFrame IRanges "%over%"
+##' @importFrom IRanges IRanges "%over%"
 ##' @importFrom GenomicRanges GRanges
-##' @importFrom GenomeInfoDb seqlengths seqlevels genome "genome<-" seqnames
 ##'
 ##' @import methods
 ##' @import BiocGenerics
+##' @import S4Vectors
+##' @import GenomeInfoDb
 ##'
 ##' @useDynLib genoset
 NULL
@@ -76,6 +75,8 @@ setValidity("GenoSet", function(object) {
 ##' @param ... More matrix or DataFrame objects to include in assayData
 ##' @return A GenoSet object or derivative as specified by "type" arg
 ##' @examples
+##'   save.image("genoset.image.rda")
+##'   save(sessionInfo(),file="genoset.session.info.rda")
 ##'   test.sample.names = LETTERS[11:13]
 ##'   probe.names = letters[1:10]
 ##'   gs = GenoSet(
@@ -500,6 +501,7 @@ setMethod("[", signature=signature(x="GenoSet",i="ANY",j="ANY"),
             callNextMethod(x,i,j,...,drop=drop)
           })
 
+# eSet uses pmatch, which is dog-slow
 ##' @rdname genoset-subset
 setMethod("[", signature=signature(x="GenoSet",i="character",j="ANY"),
           function(x,i,j,...,drop=FALSE) {
@@ -535,7 +537,7 @@ setMethod("[<-", signature=signature(x="GenoSet", i="ANY", j="ANY"),
               return(assayDataElementReplace(x,k,value))
             }
             if (!k %in% assayDataElementNames(x)) {
-              stop("Index k is not a member of assayDataElementNames.\n")
+                stop("Index k is not a member of assayDataElementNames.\n")
             }
             if (missing(i)) {
               assayDataElement(x,k)[,j] = value

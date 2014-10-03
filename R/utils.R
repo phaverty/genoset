@@ -10,7 +10,7 @@ lr2cn <- function(x) {
 }
 
 ##' Take vector or matrix of copynumber values, convert to log2ratios
-##' 
+##'
 ##' Utility function for converting copynumber units (2 is normal) to log2ratio units (two is normal). If ploidy
 ##' is provided lr is log2(cn/ploidy), otherwise log2(cn/2).
 ##' @param x numeric vector or matrix, or DataFrame with numeric-like columns (Rle typicaly). Assumed to be in copynumber units.
@@ -24,7 +24,7 @@ setGeneric("cn2lr", function(x, ploidy) standardGeneric("cn2lr"))
 ##' @rdname cn2lr-methods
 setMethod("cn2lr", signature(x="numeric"),
           function(x, ploidy) {
-            x[x <= 1e-3] = 1e-3
+            x[x <= 1e-3 & !is.na(x)] = 1e-3
             if (missing(ploidy)){
               new.x = log2(x) - 1
             } else {
@@ -37,7 +37,7 @@ setMethod("cn2lr", signature(x="numeric"),
 ##' @rdname cn2lr-methods
 setMethod("cn2lr", signature(x="matrix"),
           function(x, ploidy) {
-            x[x <= 1e-3] = 1e-3
+            x[x <= 1e-3 & !is.na(x)] = 1e-3
             if (missing(ploidy)){
               new.x = log2(x) - 1
             } else {
@@ -52,13 +52,13 @@ setMethod("cn2lr", signature(x="DataFrame"),
           function(x, ploidy) {
             if (missing(ploidy)){
               res.list = lapply( x, function(y) {
-                y[y <= 1e-3] = 1e-3
+                y[y <= 1e-3 & !is.na(y)] = 1e-3
                 log2(y) - 1
               } )
             } else {
               if ( ncol(x) != length(ploidy) ) { stop("ploidy must have the length of ncol(x)") }
               res.list = mapply( FUN=function(y, p) {
-                y[y <= 1e-3] = 1e-3
+                y[y <= 1e-3 & !is.na(y)] = 1e-3
                 log2(y/p)
               }, x, ploidy, SIMPLIFY=FALSE )
             }
@@ -130,7 +130,7 @@ gcCorrect <- function(ds, gc, retain.mean=TRUE) {
 baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
   mbaf = abs(baf[,] - 0.5) + 0.5
   is.na(mbaf) <- mbaf > hom.cutoff
-  
+
   if (!is.null(calls) && !is.null(call.pairs)) {
 
     # Use genotypes for/from samples specified by call.pairs to NA some HOMs
@@ -143,7 +143,7 @@ baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
     if ( ! identical( rownames(calls), rownames(baf) ) ) {
       stop("rownames mismatch between calls and baf.")
     }
-    
+
     # Check row matching between baf and calls.
     # Some calls rows will be missing from mbaf because PennCNV threw those features out.
     # Some rows of mbaf will not be in calls because some arrays have copy-only probes without calls
@@ -163,7 +163,7 @@ baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
 ##' Calculate GC Percentage in windows
 ##'
 ##' Local GC content  can be used to remove GC artifacts from copynumber data
-##' (see Diskin et al, Nucleic Acids Research, 2008, PMID: 18784189). This 
+##' (see Diskin et al, Nucleic Acids Research, 2008, PMID: 18784189). This
 ##' function will calculate GC content fraction in expanded windows around
 ##' a set of ranges following example in
 ##' http://www.bioconductor.org/help/course-materials/2012/useR2012/Bioconductor-tutorial.pdf. Currently
@@ -206,7 +206,7 @@ calcGC <- function(object, bsgenome, expand=1e6) {
 ##' the tallest peak represents "normal" and should therefore be centered on a
 ##' log2ratio of zero. This function uses the density function to find the mode of
 ##' the dominant peak and subtracts that value from the input data.
-##' 
+##'
 ##' @param ds numeric matrix
 ##' @return numeric matrix
 ##' @export modeCenter
@@ -216,7 +216,7 @@ modeCenter <- function(ds) {
   if (!requireNamespace("stats",quietly=TRUE)) {
     stop("Failed to require stats package.\n")
   }
-  column.modes = apply(ds,2, function(x) { 
+  column.modes = apply(ds,2, function(x) {
     l2r.density = stats::density(x,na.rm=TRUE)
     density.max.index = which.max(l2r.density$y)
     return(l2r.density$x[density.max.index])
@@ -239,7 +239,7 @@ modeCenter <- function(ds) {
 readGenoSet <- function(path) {
   header = readLines(path, 1)
   if (grepl("^RD", header)[1] == TRUE) {
-    object = get(load(path)[1])    
+    object = get(load(path)[1])
   } else {
     object = readRDS(path)
   }
@@ -260,8 +260,8 @@ readGenoSet <- function(path) {
   big <- mylapply(inds,
                 function(x) {
                   myunlist(
-#                    mylapply(dflist, function(y) { y[[x]] }), 
-                    mylapply(dflist, function(y) { .subset2(y, x) }), 
+#                    mylapply(dflist, function(y) { y[[x]] }),
+                    mylapply(dflist, function(y) { .subset2(y, x) }),
                     recursive=FALSE, use.names=FALSE)
                 })
   if (!missing(element.colname)) {
