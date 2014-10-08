@@ -1,8 +1,8 @@
 Package: genoset
 Type: Package
 Title: Provides classes similar to ExpressionSet for copy number
-    analysis
-Version: 1.19.34
+        analysis
+Version: 1.19.35
 Date: 2011-01-15
 Author: Peter M. Haverty
 Maintainer: Peter M. Haverty <phaverty@gene.com>
@@ -16,38 +16,19 @@ Description: Load, manipulate, and plot copynumber and BAF data.
     store runs of data along the genome for multiple samples.
 License: Artistic-2.0
 LazyLoad: yes
-Depends:
-    R (>= 2.10),
-    BiocGenerics (>= 0.11.3),
-    Biobase (>= 2.15.1),
-    GenomicRanges (>= 1.17.19)
-Imports:
-    S4Vectors (>= 0.2.3),
-    GenomeInfoDb (>= 1.1.3),
-    IRanges,
-    methods,
-    graphics
-Suggests:
-    RUnit,
-    DNAcopy,
-    stats,
-    BSgenome,
-    Biostrings
+Depends: R (>= 2.10), BiocGenerics (>= 0.11.3), Biobase (>= 2.15.1),
+        GenomicRanges (>= 1.17.19)
+Imports: S4Vectors (>= 0.2.3), GenomeInfoDb (>= 1.1.3), IRanges,
+        methods, graphics
+Suggests: RUnit, DNAcopy, stats, BSgenome, Biostrings
 Enhances: parallel
 ByteCompile: TRUE
 biocViews: Infrastructure, DataRepresentation, Microarray, SNP,
-    CopyNumberVariation
+        CopyNumberVariation
 Roxygen: list(wrap=TRUE)
-Collate:
-    'genoset-class.R'
-    'RleDataFrame-class.R'
-    'RleDataFrame-methods.R'
-    'bounds.R'
-    'junk.R'
-    'ordering.R'
-    'plots.R'
-    'rangeSummaries.R'
-    'segments.R'
-    'test_genoset_package.R'
-    'utils.R'
+Collate: 'genoset-class.R' 'RleDataFrame-class.R'
+        'RleDataFrame-methods.R' 'bounds.R' 'junk.R' 'ordering.R'
+        'plots.R' 'rangeSummaries.R' 'segments.R'
+        'test_genoset_package.R' 'utils.R'
 URL: https://github.com/phaverty/genoset
+Packaged: 2014-10-08 19:15:54 UTC; dtenenba
