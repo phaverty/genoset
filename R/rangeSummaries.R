@@ -152,7 +152,7 @@ setMethod("rangeMeans", signature=signature(x="numeric"),
               if (!is.double(x)) {
                   storage.mode(x) = "double"
               }
-              ans = .Call("rangeMeans_numeric", bounds, x, na.rm, PACKAGE="genoset")
+              ans = .Call("rangeMeans_numeric", bounds, x, na.rm)
               return(ans)
           })
 
@@ -161,7 +161,7 @@ setMethod("rangeMeans", signature=signature(x="matrix"), # S4 does not see a cla
               if (!is.double(x)) {
                   storage.mode(x) = "double"
               }
-              ans = .Call("rangeMeans_numeric", bounds, x, na.rm, PACKAGE="genoset")
+              ans = .Call("rangeMeans_numeric", bounds, x, na.rm)
               return(ans)
           })
 
@@ -172,16 +172,16 @@ rangeColMeans <- function(x, all.indices) {
 }
 
 ### Internal methods to get directly to summary functions, using Views, but skipping trim
-.rle_view_sums <- function(x, na.rm) { .Call("RleViews_viewSums", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
-.rle_view_means <- function(x, na.rm) { .Call("RleViews_viewMeans", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
-.rle_view_mins <- function(x, na.rm) { .Call("RleViews_viewMins", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
-.rle_view_maxs <- function(x, na.rm) { .Call("RleViews_viewMaxs", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
-.rle_view_which_mins <- function(x, na.rm) { .Call("RleViews_viewWhichMins", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
-.rle_view_which_maxs <- function(x, na.rm) { .Call("RleViews_viewWhichMaxs", x, na.rm, PACKAGE = "IRanges", PACKAGE="genoset") }
+.rle_view_sums <- function(x, na.rm) { .Call("RleViews_viewSums", x, na.rm, PACKAGE = "IRanges") }
+.rle_view_means <- function(x, na.rm) { .Call("RleViews_viewMeans", x, na.rm, PACKAGE = "IRanges") }
+.rle_view_mins <- function(x, na.rm) { .Call("RleViews_viewMins", x, na.rm, PACKAGE = "IRanges") }
+.rle_view_maxs <- function(x, na.rm) { .Call("RleViews_viewMaxs", x, na.rm, PACKAGE = "IRanges") }
+.rle_view_which_mins <- function(x, na.rm) { .Call("RleViews_viewWhichMins", x, na.rm, PACKAGE = "IRanges") }
+.rle_view_which_maxs <- function(x, na.rm) { .Call("RleViews_viewWhichMaxs", x, na.rm, PACKAGE = "IRanges") }
 
 ### Internal methods to get directly to summary functions, skipping trim and Views
 .rle_range_means <- function(start, end, values, lengths, na.rm) {
-  .Call("rangeMeans_rle", as.integer(start), as.integer(end), as.numeric(values), lengths, na.rm=na.rm, PACKAGE = "genoset")
+  .Call("rangeMeans_rle", as.integer(start), as.integer(end), as.numeric(values), lengths, na.rm=na.rm)
 }
 
 ##' Count Rle positions >= min
@@ -205,5 +205,5 @@ numCallable <- function(rle, bounds, min) {
     } else {
         stop("x must be a two-column matrix or an IRanges.")
     }
-    .Call("numCallable_rle", start, end, runValue(rle), runLength(rle), as.integer(min), PACKAGE = "genoset")
+    .Call("numCallable_rle", start, end, runValue(rle), runLength(rle), as.integer(min))
 }

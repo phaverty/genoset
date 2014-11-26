@@ -68,7 +68,7 @@ boundingIndices <- function(starts, stops, positions, all.indices=FALSE) {
   if (length(starts) != length(stops)) {
     stop("starts and stops must be the same length.")
   }
-  bounds = .Call("binary_bound", as.integer(starts), as.integer(stops), as.integer(positions), PACKAGE="genoset")
+  bounds = .Call("binary_bound", as.integer(starts), as.integer(stops), as.integer(positions))
 
   if (all.indices == TRUE) { # Return all covered and bounding indices
     return( apply( bounds, 1, function(x) { seq(from=x[1], to=x[2]) }) )
@@ -133,7 +133,7 @@ boundingIndicesByChr <-function(query, subject) {
   if (is.null(query.names)) { query.names = as.character(seq.int(from=1,to=nquery)) }
   subject.start = start(subject)
   subject.end = end(subject)
-  return(.Call("binary_bound_by_chr", nquery, query.chr.indices, query.start, query.end, query.names, subject.chr.indices, subject.start, subject.end, PACKAGE="genoset"))
+  return(.Call("binary_bound_by_chr", nquery, query.chr.indices, query.start, query.end, query.names, subject.chr.indices, subject.start, subject.end))
 }
 
 ##' Average features in ranges per sample

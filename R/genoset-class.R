@@ -36,7 +36,7 @@
 ##' @import S4Vectors
 ##' @import GenomeInfoDb
 ##'
-##' @useDynLib genoset
+##' @useDynLib genoset, .registration=TRUE
 NULL
 
 ###############
