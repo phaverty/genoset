@@ -172,13 +172,14 @@ baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
 ##' @param object GenomicRanges or GenoSet
 ##' @param bsgenome BSgenome, like Hsapiens from BSgenome.Hsapiens.UCSC.hg19
 ##' @param expand scalar integer, amount to expand each range before calculating gc
+##' @param bases character, alphabet to count, usually c("G", "C"), but "N" is useful too
 ##' @return numeric vector, fraction of nucleotides that are G or C in expanded ranges of \code{object}
 ##' @examples
 ##' \dontrun{ data(genoset) }
 ##' \dontrun{ library(BSgenome.Hsapiens.UCSC.hg19) }
 ##' \dontrun{ gc = calcGC(genoset.ds, Hsapiens) }
 ##' @export calcGC
-calcGC <- function(object, bsgenome, expand=1e6) {
+calcGC <- function(object, bsgenome, expand=1e6, bases=c("G", "C")) {
   if (!requireNamespace("BSgenome",quietly=TRUE)) {
     stop("Failed to require BSgenome package.\n")
   }
@@ -186,7 +187,7 @@ calcGC <- function(object, bsgenome, expand=1e6) {
     stop("Failed to require Biostrings package.\n")
   }
   chr.ind = chrIndices(object)
-  rownames(chr.ind) = paste0("chr", rownames(chr.ind))
+#  rownames(chr.ind) = paste0("chr", rownames(chr.ind))
   start = start(object) - expand
   end = end(object) + expand
   gc.list = lapply(rownames(chr.ind), function(chr.name) {
@@ -194,7 +195,7 @@ calcGC <- function(object, bsgenome, expand=1e6) {
     seq = bsgenome[[chr.name]]
     v = suppressWarnings( Views(seq,  start=start[range], end=end[range]) )
     alf = alphabetFrequency(v, as.prob = TRUE)
-    gc = rowSums(alf[,  c("G",  "C"), drop=FALSE])
+    gc = rowSums(alf[, bases, drop=FALSE])
   })
   gc = do.call(c, gc.list)
   return(gc)
