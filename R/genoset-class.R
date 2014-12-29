@@ -76,7 +76,8 @@ setValidity("GenoSet", function(object) {
 ##' @return A GenoSet object or derivative as specified by "type" arg
 ##' @examples
 ##'   save.image("genoset.image.rda")
-##'   save(sessionInfo(),file="genoset.session.info.rda")
+##'   genoset.session.info = sessionInfo()
+##'   save(genoset.session.info,file="genoset.session.info.rda")
 ##'   test.sample.names = LETTERS[11:13]
 ##'   probe.names = letters[1:10]
 ##'   gs = GenoSet(
