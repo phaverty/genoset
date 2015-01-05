@@ -175,7 +175,7 @@ baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
 ##' @param bases character, alphabet to count, usually c("G", "C"), but "N" is useful too
 ##' @return numeric vector, fraction of nucleotides that are G or C in expanded ranges of \code{object}
 ##' @examples
-##' \dontrun{ data(genoset) }
+##  \dontrun{ data(genoset) }
 ##' \dontrun{ library(BSgenome.Hsapiens.UCSC.hg19) }
 ##' \dontrun{ gc = calcGC(genoset.ds, Hsapiens) }
 ##' @export calcGC
@@ -187,7 +187,11 @@ calcGC <- function(object, bsgenome, expand=1e6, bases=c("G", "C")) {
     stop("Failed to require Biostrings package.\n")
   }
   chr.ind = chrIndices(object)
-#  rownames(chr.ind) = paste0("chr", rownames(chr.ind))
+
+  rownames(chr.ind) = gsub("^chr", "", rownames(chr.ind)) # always take off 'chr' prefix to having 'chrchr'
+  if (grepl("^chr", seqnames(bsgenome)[1])) {
+      rownames(chr.ind) = paste0("chr", rownames(chr.ind)) 
+  }
   start = start(object) - expand
   end = end(object) + expand
   gc.list = lapply(rownames(chr.ind), function(chr.name) {
