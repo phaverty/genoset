@@ -2,7 +2,7 @@ Package: genoset
 Type: Package
 Title: Provides classes similar to ExpressionSet for copy number
     analysis
-Version: 1.21.5
+Version: 1.21.6
 Date: 2011-01-15
 Author: Peter M. Haverty
 Maintainer: Peter M. Haverty <phaverty@gene.com>
@@ -45,6 +45,7 @@ Collate:
     'bounds.R'
     'junk.R'
     'ordering.R'
+    'other_assay_objects.R'
     'plots.R'
     'rangeSummaries.R'
     'segments.R'

@@ -222,6 +222,7 @@ setMethod("genome", "GenoSet", function(x) {
 })
 ##' @exportMethod "genome<-"
 ##' @rdname genome-methods
+##' @param value scalar character, incoming genome string
 setMethod("genome<-", "GenoSet", function(x, value) {
   genome(x@locData) = value
   return(x)
@@ -243,6 +244,7 @@ setMethod("colnames", signature(x="GenoSet"),
           })
 ##' @exportMethod "colnames<-"
 ##' @rdname colnames
+##' @param value character, incoming colnames
 setMethod("colnames<-", signature(x="GenoSet"),
           function(x, value) {
             rownames(pData(x)) = value
@@ -251,6 +253,7 @@ setMethod("colnames<-", signature(x="GenoSet"),
           })
 
 ##' @rdname colnames
+##' @param object a Genoset
 ##' @exportMethod sampleNames
 setMethod("sampleNames", signature(object="GenoSet"),
           function(object) {
@@ -270,7 +273,7 @@ setMethod("sampleNames<-", signature(object="GenoSet"),
 ##' Get rownames from GRanges, or GenoSet
 ##'
 ##' Get rownames from GRanges or GenoSet.
-##' @param object GRanges or GenoSet
+##' @param x GRanges or GenoSet
 ##' @return character vector with names rows/features
 ##' @examples
 ##'   data(genoset)
@@ -279,7 +282,7 @@ setMethod("sampleNames<-", signature(object="GenoSet"),
 ##' @exportMethod rownames
 ##' @exportMethod "rownames<-"
 ##' @rdname rownames-methods
-setMethod("rownames", signature(x="GRanges"),
+setMethod("rownames", signature(x="GenomicRanges"),
           function(x) {
             names(x)
           })
@@ -289,8 +292,9 @@ setMethod("rownames", signature(x="GenoSet"),
             return(unname(featureNames(featureData(x))))
           })
 ##' @rdname rownames-methods
+##' @param value character, incoming rownames
 setMethod("rownames<-",
-                 signature=signature(x="GRanges", value="ANY"),
+                 signature=signature(x="GenomicRanges", value="ANY"),
                  function(x, value) {
                    names(x) = value
                    return(x)
@@ -307,6 +311,7 @@ setMethod("rownames<-",
                  })
 
 ##' @rdname rownames-methods
+##' @param object GenoSet
 ##' @exportMethod featureNames
 ##' @exportMethod "featureNames<-"
 setMethod("featureNames", signature(object="GenoSet"),
@@ -316,7 +321,7 @@ setMethod("featureNames", signature(object="GenoSet"),
           })
 
 ##' @rdname rownames-methods
-setMethod("featureNames", signature(object="GRanges"),
+setMethod("featureNames", signature(object="GenomicRanges"),
           function(object) {
               .Deprecated("rownames")
             names(object)
@@ -333,7 +338,7 @@ setMethod("featureNames<-",
 
 ##' @rdname rownames-methods
 setMethod("featureNames<-",
-          signature=signature(object="GRanges", value="ANY"),
+          signature=signature(object="GenomicRanges", value="ANY"),
           function(object, value) {
               .Deprecated("rownames<-")
             names(object) = value
@@ -367,7 +372,7 @@ setMethod("locData", "GenoSet", function(object) {
 setGeneric("locData<-", function(object,value) standardGeneric("locData<-") )
 
 ##' @rdname locData-methods
-setMethod("locData<-", signature(object="GenoSet", value="GRanges"),
+setMethod("locData<-", signature(object="GenoSet", value="GenomicRanges"),
                  function(object,value) {
                    if (! all( rownames(value) %in% rownames(object))) {
                        stop("Can not replace locData using rownames not in this GenoSet")
@@ -428,8 +433,8 @@ setMethod("names", "GenoSet", function(x) {
 setMethod("elementLengths", "GenoSet", function(x) { return( elementLengths(locData(x)) ) } )
 
 ##' @rdname elementLengths-methods
-setMethod("elementLengths", "GRanges", function(x) {
-  if ( any(duplicated(runValue(seqnames(x)))) ) {  stop("GRanges not ordered by chromosome.") }
+setMethod("elementLengths", "GenomicRanges", function(x) {
+  if ( any(duplicated(runValue(seqnames(x)))) ) {  stop("GenomicRanges not ordered by chromosome.") }
   return( structure(runLength(seqnames(x)),names=as.character(runValue(seqnames(x)))) )
 })
 
@@ -439,7 +444,7 @@ setMethod("elementLengths", "GRanges", function(x) {
 ##' @param x GRanges or GenoSet
 ##' @return integer
 ##' @exportMethod nrow
-setMethod("nrow", "GRanges", function(x) { length(x) })
+setMethod("nrow", "GenomicRanges", function(x) { length(x) })
 
 ##' Dimensions
 ##'
@@ -519,6 +524,7 @@ setMethod("[", signature=signature(x="GenoSet", i="GenomicRanges", j="ANY"),
             callNextMethod(x,indices,j,...,drop=drop)
           })
 
+##' @param value incoming data for assay "k", rows "i" and cols "j"
 ##' @rdname genoset-subset
 setMethod("[<-", signature=signature(x="GenoSet", i="ANY", j="ANY"),
           function(x,i,j,k,value) {
@@ -544,7 +550,7 @@ setMethod("[<-", signature=signature(x="GenoSet", i="ANY", j="ANY"),
               assayDataElement(x,k)[,j] = value
               return(x)
             }
-            if (is(i,"RangedData") || is(i,"GRanges")) {
+            if (is(i,"RangedData") || is(i,"GenomicRanges")) {
               i = unlist(locData(x) %over% i)
             }
             if (missing(j)) {
@@ -564,6 +570,7 @@ setMethod("[<-", signature=signature(x="GenoSet", i="ANY", j="ANY"),
 ##' Prints out a description of a GenoSet object
 ##' @exportMethod show
 ##' @aliases show,GenoSet-method
+##' @param object a GenoSet
 setMethod("show","GenoSet",
           function(object) {
             callNextMethod(object)
@@ -590,7 +597,7 @@ setGeneric("chr", function(object) standardGeneric("chr"))
 ##' @rdname chr-methods
 setMethod("chr", "GenoSet", function(object) { return(chr(slot(object,"locData"))) } )
 ##' @rdname chr-methods
-setMethod("chr", "GRanges", function(object) { return(as.character(seqnames(object))) })
+setMethod("chr", "GenomicRanges", function(object) { return(as.character(seqnames(object))) })
 
 ##' Chromosome position of features
 ##'
@@ -632,7 +639,7 @@ setMethod("chrNames", signature(object="GenoSet"),
           })
 
 ##' @rdname chrNames-methods
-setMethod("chrNames", signature(object="GRanges"),
+setMethod("chrNames", signature(object="GenomicRanges"),
           function(object) {
             as.character(unique(seqnames(object)))
           })
@@ -649,7 +656,7 @@ setMethod("chrNames<-", signature(object="GenoSet"),
           })
 
 ##' @rdname chrNames-methods
-setMethod("chrNames<-", signature(object="GRanges"),
+setMethod("chrNames<-", signature(object="GenomicRanges"),
           function(object,value) {
             seqlevels(object) = value
             return(object)
@@ -672,7 +679,7 @@ setGeneric("chrInfo", function(object) standardGeneric("chrInfo") )
 setMethod("chrInfo", signature(object="GenoSetOrGenomicRanges"),
           function(object) {
             # Get max end value for each chr
-            if (class(object) == "GRanges" && !any(is.na(seqlengths(object)))) {
+            if (is(object, "GenomicRanges") && !any(is.na(seqlengths(object)))) {
               max.val = seqlengths(object)
             } else {
               chr.ind=chrIndices(object)
