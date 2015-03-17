@@ -15,12 +15,18 @@ test_RleDataFrame_views <- function() {
     rownames(y) = rownames
     y
   }
-  sum_list       = as.list(viewSums(Views(rle_list, ir)))
-  mean_list      = as.list(viewMeans(Views(rle_list, ir)))
-  min_list       = as.list(viewMins(Views(rle_list, ir)))
-  max_list       = as.list(viewMaxs(Views(rle_list, ir)))
-  which_min_list = as.list(viewWhichMins(Views(rle_list, ir)))
-  which_max_list = as.list(viewWhichMaxs(Views(rle_list, ir)))
+ hackRleViewsList <- function(rle_list, ir) {
+      RleViewsList(
+          lapply( rle_list, Views, start=ir )
+          )
+  }
+  rle_view_list = hackRleViewsList(rle_list, ir)
+  sum_list       = as.list(viewSums(rle_view_list))
+  mean_list      = as.list(viewMeans(rle_view_list))
+  min_list       = as.list(viewMins(rle_view_list))
+  max_list       = as.list(viewMaxs(rle_view_list))
+  which_min_list = as.list(viewWhichMins(rle_view_list))
+  which_max_list = as.list(viewWhichMaxs(rle_view_list))
   # tests
   checkEquals(rangeSums(rle_df, ir, simplify=FALSE), sum_list)
   checkEquals(rangeMeans(rle_df, ir, simplify=FALSE, na.rm=TRUE), mean_list)
