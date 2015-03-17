@@ -1,6 +1,6 @@
 
-R version 3.1.0 (2014-04-10) -- "Spring Dance"
-Copyright (C) 2014 The R Foundation for Statistical Computing
+R Under development (unstable) (2015-03-16 r67993) -- "Unsuffered Consequences"
+Copyright (C) 2015 The R Foundation for Statistical Computing
 Platform: x86_64-unknown-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -39,7 +39,7 @@ The following objects are masked from 'package:base':
     eval, evalq, get, intersect, is.unsorted, lapply, mapply, match,
     mget, order, paste, pmax, pmax.int, pmin, pmin.int, rank, rbind,
     rep.int, rownames, sapply, setdiff, sort, table, tapply, union,
-    unique, unlist
+    unique, unlist, unsplit
 
 Loading required package: Biobase
 Welcome to Bioconductor
@@ -48,18 +48,11 @@ Welcome to Bioconductor
     'browseVignettes()'. To cite Bioconductor, see
     'citation("Biobase")', and for packages 'citation("pkgname")'.
 
-Loading required package: IRanges
-Loading required package: S4Vectors
-Loading required package: GenomeInfoDb
 Loading required package: GenomicRanges
-
-Attaching package: 'GenomicRanges'
-
-The following objects are masked from 'package:GenomeInfoDb':
-
-    Seqinfo, dropSeqlevels, keepSeqlevels, keepStandardChromosomes,
-    renameSeqlevels, restoreSeqlevels
-
+Loading required package: S4Vectors
+Loading required package: stats4
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
 [1] TRUE
 > genoset:::.test()
 Using mclapply for segmentation ...
@@ -79,19 +72,20 @@ Working on segmentation for sample number 1 : a1
 Working on segmentation for sample number 2 : a2
 
 
-RUNIT TEST PROTOCOL -- Thu May  8 09:40:10 2014 
+RUNIT TEST PROTOCOL -- Tue Mar 17 12:16:04 2015 
 *********************************************** 
-Number of test functions: 30 
+Number of test functions: 33 
 Number of errors: 0 
 Number of failures: 0 
 
  
 1 Test Suite : 
-genoset RUnit Tests - 30 test functions, 0 errors, 0 failures
-Number of test functions: 30 
+genoset RUnit Tests - 33 test functions, 0 errors, 0 failures
+Number of test functions: 33 
 Number of errors: 0 
 Number of failures: 0 
+There were 16 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
- 15.940   0.340  15.024 
+ 17.524   0.325  15.827 

@@ -94,7 +94,8 @@ rangeWhichMins(df,bounds)
 rangeWhichMaxs(df,bounds)
 
 # RleDataFrame isa SimpleRleList, so all the IRanges view* methods work too:
-viewMeans( Views( df, bounds) )
+v = RleViewsList( lapply( df, Views, start=bounds ) )
+viewMeans(v)
 }
 
 \seealso{
