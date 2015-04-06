@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.21.10
+--------------------------
+
+NEW FEATURES
+
+    o calcGC gets a 'bases' argument and handles the presence or absence of 'chr'
+    prefixes in a safer manner.
+
 CHANGES IN VERSION 1.19.27
 --------------------------
 
