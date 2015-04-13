@@ -19,7 +19,7 @@
 ##' @seealso genoset-datasets GenoSet
 ##'
 ##' @importClassesFrom Biobase AnnotatedDataFrame AssayData eSet ExpressionSet MIAME Versioned VersionedBiobase
-##' @importClassesFrom GenomicRanges GRanges GenomicRanges GIntervalTree DelegatingGenomicRanges GNCList
+##' @importClassesFrom GenomicRanges GRanges GenomicRanges DelegatingGenomicRanges
 ##'
 ##' @importMethodsFrom GenomicRanges names "names<-" length width
 ##' @importMethodsFrom Biobase annotation fData featureNames "featureNames<-" phenoData sampleNames "sampleNames<-"
