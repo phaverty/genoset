@@ -229,7 +229,7 @@ calcGC2 <- function(dna) {
         lapply( dna,
                function(x) {
                    gc = rowSums( letterFrequencyInSlidingView(x, window, c("G", "C"), as.prob=TRUE), na.rm=TRUE )
-                   gc = Rle(1e4 * gc)
+                   Rle(as.integer(1e4 * gc))
                }), compress=FALSE)
     return(gc.list)
 }
