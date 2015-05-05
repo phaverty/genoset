@@ -170,7 +170,7 @@ baf2mbaf <- function(baf, hom.cutoff=0.95, calls=NULL, call.pairs=NULL) {
 ##' all ranges are tabulated, later I may do letterFrequencyInSlidingWindow for big windows and then
 ##' match to the nearest.
 ##' @param object GenomicRanges or GenoSet
-##' @param bsgenome BSgenome, like Hsapiens from BSgenome.Hsapiens.UCSC.hg19
+##' @param bsgenome BSgenome, like Hsapiens from BSgenome.Hsapiens.UCSC.hg19 or DNAStringSet.
 ##' @param expand scalar integer, amount to expand each range before calculating gc
 ##' @param bases character, alphabet to count, usually c("G", "C"), but "N" is useful too
 ##' @return numeric vector, fraction of nucleotides that are G or C in expanded ranges of \code{object}
@@ -186,10 +186,11 @@ calcGC <- function(object, bsgenome, expand=1e6, bases=c("G", "C")) {
   if (!requireNamespace("Biostrings",quietly=TRUE)) {
     stop("Failed to require Biostrings package.\n")
   }
+  if (is(bsgenome, "GmapGenome")) { bsgenome = as(bsgenome, "DNAStringSet") }
+  
   chr.ind = chrIndices(object)
-
   rownames(chr.ind) = gsub("^chr", "", rownames(chr.ind)) # always take off 'chr' prefix to having 'chrchr'
-  if (grepl("^chr", seqnames(bsgenome)[1])) {
+  if (grepl("^chr", seqlevels(bsgenome)[1])) {
       rownames(chr.ind) = paste0("chr", rownames(chr.ind)) 
   }
   start = start(object) - expand
@@ -203,6 +204,34 @@ calcGC <- function(object, bsgenome, expand=1e6, bases=c("G", "C")) {
   })
   gc = do.call(c, gc.list)
   return(gc)
+}
+
+##' Calculate GC Percentage in sliding window
+##'
+##' Local GC content  can be used to remove GC artifacts from copynumber data
+##' (see Diskin et al, Nucleic Acids Research, 2008, PMID: 18784189). This
+##' function will calculate GC content fraction in expanded windows around
+##' a set of ranges following example in
+##' http://www.bioconductor.org/help/course-materials/2012/useR2012/Bioconductor-tutorial.pdf.
+##' Values are as.integer( 1e4 * fraction ) for space reasons.
+##' @param dna BSgenome or DNAStringSet
+##' @param window scalar integer, calculate GC content in a sliding (by one base) window of this size.
+##' @return SimpleRleList, integer 1e4 * GC fraction, chromosomes 1:22, X and Y
+##' @examples
+##' \dontrun{ library(BSgenome.Hsapiens.UCSC.hg19) }
+##' \dontrun{ gc = calcGC2(Hsapiens) }
+##' @export
+calcGC2 <- function(dna) {
+    dna = as(gmapGenome, "DNAStringSet")
+    dna = dna[ c(1:22, "X", "Y") ]
+    window = 1e6
+    gc.list = RleList(
+        lapply( dna,
+               function(x) {
+                   gc = rowSums( letterFrequencyInSlidingView(x, window, c("G", "C"), as.prob=TRUE), na.rm=TRUE )
+                   gc = Rle(1e4 * gc)
+               }), compress=FALSE)
+    return(gc.list)
 }
 
 ##' Center continuous data on mode
