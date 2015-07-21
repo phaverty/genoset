@@ -2,7 +2,7 @@ Package: genoset
 Type: Package
 Title: Provides classes similar to ExpressionSet for copy number
     analysis
-Version: 1.23.3
+Version: 1.23.4
 Date: 2015-07-21
 Author: Peter M. Haverty
 Maintainer: Peter M. Haverty <phaverty@gene.com>

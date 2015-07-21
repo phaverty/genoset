@@ -33,7 +33,7 @@ with data associated with with genome locations.
 In typical Bioconductor style, `GenoSet` objects, and derivatives, can be created using the functions
 with the same name.  Let's load up some fake data to experiment
 with. Don't worry too much about how the fake data gets made. Notice how assayData
-elements can be matrices or `DataFrames` with `Rle` columns (from `r Biocpkg("IRanges")`). They can also
+elements can be matrices or `RleDataFrames`. They can also
 be `BigMatrix` or `BigMatrixFactor` objects (from `r Biocpkg("bigmemoryExtras")`).
 
 ```{r objectcreation}
@@ -44,7 +44,7 @@ gs
 
 rle.ds = GenoSet( locData=locData.gr,
   cn = fake.cn,
-  cn.segments=DataFrame(
+  cn.segments=RleDataFrame(
     K=Rle(c(rep(1.5,300),rep(2.3,700))),L=Rle( c(rep(3.2,700),rep(2.1,300)) ),
     M=Rle(rep(1.1,1000)),row.names=rownames(fake.cn)),
   pData=fake.pData,
@@ -190,7 +190,7 @@ utilized.
 
 Additionally, `GenoSet` stores segment values so that they can be
 accessed quickly at both the feature and segment level. We use a
-`DataFrame` object from `r Biocpkg("IRanges")` where each column is a
+`RleDataFrame` object where each column is a
 Run-Length-Encoded `Rle` object. This dramatically reduces the
 amount of memory required to store the segments. Note how the segmented values
 become just another member of the assayData slot.
@@ -229,7 +229,7 @@ Run-Length-Encoded vector. Tables of segments are useful for printing, overlap q
 database storage, or for summarizing changes in a sample.  Rle 
 representations can be used like regular vectors, plotted as segments (see `genoPlot`), and 
 stored efficiently. A collection of `Rle` objects, one for each sample, are often stored as 
-one `DataFrame` in a `GenoSet`.  `r Biocpkg("genoset")` provides functions to quickly flip back and forth 
+one `RleDataFrame` in a `GenoSet`.  `r Biocpkg("genoset")` provides functions to quickly flip back and forth 
 between table and Rle representations. You can use these functions on single samples, or 
 the whole collection of samples.
 
@@ -282,10 +282,10 @@ optimized for speed.  For example, with 2.5M features and ~750
 samples, it takes 0.12 seconds to find the features bounded by all
 Entrez Genes (one RefSeq each). Calculating the mean value for each
 gene and sample takes ~9 seconds for a matrix of array data and ~30
-seconds for a DataFrame of compressed Rle objects.
+seconds for a RleDataFrame of compressed Rle objects.
 
 Generally, you will want to summarize segmented data and will be working with a 
-`DataFrame` of `Rle`, like that returned by `runCBS`.
+`RleDataFrame`, like that returned by `runCBS`.
 
 As an example, let's say you want to get the copynumber of your two
 favorite genes from the subsetting example:
@@ -341,11 +341,11 @@ baf.ds = GenoSet( locData=locData.gr, lrr=fake.lrr, baf=fake.baf, pData=fake.pDa
 baf.ds[, , "mbaf"] = baf2mbaf(baf.ds[, , "baf"], hom.cutoff = 0.90)
 ``` 
 
-... or use compress it to a DataFrame of Rle. This uses ~1/3 the space
+... or use compress it to an RleDataFrame. This uses ~1/3 the space
 on our random test data.
 
 ```{r mbaftorle}
-mbaf.data = DataFrame( sapply(colnames( baf.ds),
+mbaf.data = RleDataFrame( sapply(colnames( baf.ds),
   function(x) { Rle( baf.ds[,x, "mbaf"] ) },
   USE.NAMES=TRUE, simplify=FALSE ) )
 as.numeric(object.size( baf.ds[, ,"mbaf"]))  / as.numeric( object.size(mbaf.data))
@@ -361,7 +361,7 @@ columns in your baf matrix do not have an entry in this list, then
 those baf columns are cleaned of HOMs using the hom.cutoff, as above.
 
 Both mBAF and LRR can and should be segmented. Consider storing mBAF
-as a DataFrame of Rle as only the ~1/1000 HET positions are being used
+as an RleDataFrame as only the ~1/1000 HET positions are being used
 and all those NA HOM positions will compress nicely.
 
 ```{r segment}
@@ -388,7 +388,7 @@ genoPlot(baf.ds,baf.ds[,1,"baf.segs"],chr="chr12", add=TRUE,col="red")
 # Cross-sample summaries
 You can quickly calculate summaries across samples to identify regions
 with frequent alterations.  A bit more care is necessary to work one
-sample at a time if your data ``matrix'' is a `DataFrame`.
+sample at a time if your data "matrix" is an `RleDataFrame`.
 
 ```{r crosssample}
 gain.list = lapply(colnames(baf.ds),
