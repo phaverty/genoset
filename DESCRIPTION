@@ -2,8 +2,8 @@ Package: genoset
 Type: Package
 Title: Provides classes similar to ExpressionSet for copy number
     analysis
-Version: 1.23.2
-Date: 2011-01-15
+Version: 1.23.3
+Date: 2015-07-21
 Author: Peter M. Haverty
 Maintainer: Peter M. Haverty <phaverty@gene.com>
 Description: Load, manipulate, and plot copynumber and BAF data.
@@ -29,6 +29,8 @@ Imports:
     graphics
 Suggests:
     RUnit,
+    knitr,
+    BiocStyle,
     DNAcopy,
     stats,
     BSgenome,
@@ -50,5 +52,6 @@ Collate:
     'segments.R'
     'test_genoset_package.R'
     'utils.R'
+VignetteBuilder: knitr
 URL: https://github.com/phaverty/genoset
 Packaged: 2014-10-08 19:15:54 UTC; dtenenba
