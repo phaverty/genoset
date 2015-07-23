@@ -19,8 +19,8 @@ cn2lr(x, ploidy)
 \arguments{
   \item{x}{numeric vector or matrix, or DataFrame with
   numeric-like columns (Rle typicaly). Assumed to be in
-  copynumber units.} \item{ploidy}{numeric, of length
-  ncol(x). Ploidy of each sample.}
+  copynumber units.} \item{ploidy}{numeric, of length ncol(x).
+  Ploidy of each sample.}
 }
 \value{
 data of same type as "x" transformed into log2ratio units

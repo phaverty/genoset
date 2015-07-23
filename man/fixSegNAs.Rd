@@ -7,8 +7,8 @@
 fixSegNAs(x, max.na.run = 3)
 }
 \arguments{
-  \item{x}{Rle to be fixed} \item{max.na.run}{integer,
-  longest run of NAs that will be fixed}
+  \item{x}{Rle to be fixed} \item{max.na.run}{integer, longest
+  run of NAs that will be fixed}
 }
 \value{
 Rle

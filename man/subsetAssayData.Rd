@@ -8,9 +8,9 @@ subsetAssayData(orig, i, j, ..., drop = FALSE)
 }
 \arguments{
   \item{orig}{assayData environment} \item{i}{row indices}
-  \item{j}{col indices} \item{...}{Additional args to give
-  to subset operator} \item{drop}{logical, drop dimensions
-  when subsetting with single value?}
+  \item{j}{col indices} \item{...}{Additional args to give to
+  subset operator} \item{drop}{logical, drop dimensions when
+  subsetting with single value?}
 }
 \value{
 assayData data structure

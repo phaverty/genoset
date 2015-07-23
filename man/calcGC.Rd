@@ -11,8 +11,8 @@ calcGC(object, bsgenome, expand = 1e+06, bases = c("G", "C"))
   {BSgenome, like Hsapiens from BSgenome.Hsapiens.UCSC.hg19
   or DNAStringSet.} \item{expand}{scalar integer, amount
   to expand each range before calculating gc} \item{bases}
-  {character, alphabet to count, usually c("G", "C"), but
-  "N" is useful too}
+  {character, alphabet to count, usually c("G", "C"), but "N"
+  is useful too}
 }
 \value{
 numeric vector, fraction of nucleotides that are G or C in

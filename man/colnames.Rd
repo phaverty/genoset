@@ -17,8 +17,8 @@
 \S4method{sampleNames}{GenoSet,ANY}(object) <- value
 }
 \arguments{
-  \item{x}{GenoSet} \item{value}{character, incoming
-  colnames} \item{object}{a Genoset}
+  \item{x}{GenoSet} \item{value}{character, incoming colnames}
+  \item{object}{a Genoset}
 }
 \value{
 character vector with names of samples

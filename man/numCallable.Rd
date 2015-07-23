@@ -8,10 +8,10 @@ numCallable(rle, bounds, min)
 }
 \arguments{
   \item{rle}{integer Rle, no NAs} \item{bounds}{IRanges or
-  matrix, positions in Rle to consider. If \code{bounds}
-  is a matrix, the first two columns are used as start and
-  end.} \item{min}{scalar integer, count Rle positions >=
-  this value.}
+  matrix, positions in Rle to consider. If \code{bounds} is
+  a matrix, the first two columns are used as start and end.}
+  \item{min}{scalar integer, count Rle positions >= this
+  value.}
 }
 \value{
 integer vector of length nrow(bounds)

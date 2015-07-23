@@ -16,16 +16,16 @@ segPairTable(x, y, ...)
   factor.chr = TRUE)
 }
 \arguments{
-  \item{x}{Rle or list/DataFrame of Rle vectors} \item{y}
-  {Rle or list/DataFrame of Rle vectors} \item{...}
-  {in generic, extra arguments for methods} \item{locs}
-  {GenomicRanges with rows corresponding to rows of df}
-  \item{chr.ind}{matrix, like from chrIndices method}
-  \item{start}{integer, vector of feature start positions}
-  \item{end}{integer, vector of feature end positions}
-  \item{factor.chr}{scalar logical, make 'chrom' column
-  a factor?} \item{stack}{logical, rbind list of segment
-  tables for each sample and add "Sample" column?}
+  \item{x}{Rle or list/DataFrame of Rle vectors} \item{y}{Rle
+  or list/DataFrame of Rle vectors} \item{...}{in generic,
+  extra arguments for methods} \item{locs}{GenomicRanges with
+  rows corresponding to rows of df} \item{chr.ind}{matrix,
+  like from chrIndices method} \item{start}{integer, vector
+  of feature start positions} \item{end}{integer, vector of
+  feature end positions} \item{factor.chr}{scalar logical,
+  make 'chrom' column a factor?} \item{stack}{logical, rbind
+  list of segment tables for each sample and add "Sample"
+  column?}
 }
 \value{
 one or a list of data.frames with columns chrom, loc.start,

@@ -14,8 +14,8 @@ toGenomeOrder(ds, strict = TRUE)
 \S4method{toGenomeOrder}{GenoSet}(ds, strict = TRUE)
 }
 \arguments{
-  \item{ds}{GenoSet or GRanges} \item{strict}{logical,
-  should chromosomes be in order specified by chrOrder?}
+  \item{ds}{GenoSet or GRanges} \item{strict}{logical, should
+  chromosomes be in order specified by chrOrder?}
 }
 \value{
 re-ordered ds

@@ -13,10 +13,10 @@ GenoSet(locData, pData = NULL, annotation = "", universe,
   featureNames.} \item{pData}{A data frame with rownames
   matching all data matrices} \item{annotation}{character,
   string to specify chip/platform type} \item{universe}
-  {character, a string to specify the genome universe
-  for locData} \item{assayData}{assayData, usually an
-  environment} \item{...}{More matrix or DataFrame objects
-  to include in assayData}
+  {character, a string to specify the genome universe for
+  locData} \item{assayData}{assayData, usually an environment}
+  \item{...}{More matrix or DataFrame objects to include in
+  assayData}
 }
 \value{
 A GenoSet object

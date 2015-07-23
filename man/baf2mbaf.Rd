@@ -8,12 +8,12 @@ baf2mbaf(baf, hom.cutoff = 0.95, calls = NULL, call.pairs = NULL)
 }
 \arguments{
   \item{baf}{numeric matrix of BAF values} \item{hom.cutoff}
-  {numeric, values above this cutoff to be made NA
-  (considered HOM)} \item{calls}{matrix of NA, CT, AG,
-  etc. genotypes to select HETs (in normals). Dimnames must
-  match baf matrix.} \item{call.pairs}{list, names represent
-  target samples for HOMs to set to NA. Values represent
-  columns in "calls" matrix.}
+  {numeric, values above this cutoff to be made NA (considered
+  HOM)} \item{calls}{matrix of NA, CT, AG, etc. genotypes to
+  select HETs (in normals). Dimnames must match baf matrix.}
+  \item{call.pairs}{list, names represent target samples
+  for HOMs to set to NA. Values represent columns in "calls"
+  matrix.}
 }
 \value{
 numeric matix of mBAF values

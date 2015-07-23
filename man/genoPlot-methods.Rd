@@ -22,20 +22,19 @@ genoPlot(x, y, ...)
 \arguments{
   \item{x}{GenoSet (or descendant) or GRanges} \item{y}
   {numeric or Rle} \item{...}{Additional plotting args}
-  \item{add}{Add plot to existing plot} \item{xlab}
-  {character, label for x-axis of plot} \item{ylab}
-  {character, label for y-axis of plot} \item{col}
-  {character, color to plot lines or points} \item{locs}
-  {GRanges, like locData slot of GenoSet} \item{lwd}
-  {numeric, line width for segment plots from an Rle}
-  \item{xlim}{integer, length two, bounds for genome
-  positions. Used in conjunction with "chr" to subset data
-  for plotting.} \item{chr}{Chromosome to plot, NULL by
-  default for full genome} \item{pch}{character or numeric,
-  printing character, see points}
+  \item{add}{Add plot to existing plot} \item{xlab}{character,
+  label for x-axis of plot} \item{ylab}{character, label for
+  y-axis of plot} \item{col}{character, color to plot lines or
+  points} \item{locs}{GRanges, like locData slot of GenoSet}
+  \item{lwd}{numeric, line width for segment plots from an
+  Rle} \item{xlim}{integer, length two, bounds for genome
+  positions. Used in conjunction with "chr" to subset data for
+  plotting.} \item{chr}{Chromosome to plot, NULL by default
+  for full genome} \item{pch}{character or numeric, printing
+  character, see points}
 }
 \value{
-nothing
+TRUE
 }
 \description{
 Plot location data and chromosome boundaries from a

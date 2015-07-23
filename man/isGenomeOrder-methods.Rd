@@ -14,9 +14,8 @@ isGenomeOrder(ds, strict = TRUE)
 \S4method{isGenomeOrder}{GRanges}(ds, strict = TRUE)
 }
 \arguments{
-  \item{ds}{GenoSet or GRanges} \item{strict}{logical,
-  should space/chromosome order be identical to that from
-  chrOrder?}
+  \item{ds}{GenoSet or GRanges} \item{strict}{logical, should
+  space/chromosome order be identical to that from chrOrder?}
 }
 \value{
 logical

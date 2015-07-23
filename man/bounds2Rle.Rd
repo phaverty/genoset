@@ -8,11 +8,11 @@ bounds2Rle(bounds, values, n)
 }
 \arguments{
   \item{bounds}{matrix, two columns, with first and last
-  index, like from boundingIndicesByChr} \item{values}
-  {ANY, some value to be associated with each range, like
-  segmented copy number.} \item{n}{integer, the expected
-  length of the Rle, i.e. the number of features in the
-  genome/target ranges processed by boundingIndicesByChr.}
+  index, like from boundingIndicesByChr} \item{values}{ANY,
+  some value to be associated with each range, like segmented
+  copy number.} \item{n}{integer, the expected length of the
+  Rle, i.e. the number of features in the genome/target ranges
+  processed by boundingIndicesByChr.}
 }
 \value{
 Rle

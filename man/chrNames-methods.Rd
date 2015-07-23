@@ -23,8 +23,8 @@ chrNames(object) <- value
 \S4method{chrNames}{GenomicRanges}(object) <- value
 }
 \arguments{
-  \item{object}{GenomicRanges or GenoSet} \item{value}
-  {return value of chrNames}
+  \item{object}{GenomicRanges or GenoSet} \item{value}{return
+  value of chrNames}
 }
 \value{
 character vector with names of chromosomes

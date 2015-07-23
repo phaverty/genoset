@@ -13,12 +13,12 @@ initGenoSet(type, locData, pData = NULL, annotation = "", universe,
   specifying feature chromosome locations. rownames are
   required to match assayData.} \item{pData}{A data frame
   with rownames matching colnames of all assayDataElements}
-  \item{annotation}{character, string to specify chip/
-  platform type} \item{universe}{character, a string
-  to specify the genome universe for locData, overrides
-  universe/genome data in locData} \item{assayData}
-  {assayData, usually an environment} \item{...}{More matrix
-  or DataFrame objects to include in assayData}
+  \item{annotation}{character, string to specify chip/platform
+  type} \item{universe}{character, a string to specify the
+  genome universe for locData, overrides universe/genome
+  data in locData} \item{assayData}{assayData, usually an
+  environment} \item{...}{More matrix or DataFrame objects to
+  include in assayData}
 }
 \value{
 A GenoSet object or derivative as specified by "type" arg

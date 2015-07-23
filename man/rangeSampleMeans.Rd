@@ -8,10 +8,10 @@ rangeSampleMeans(query, subject, assay.element, na.rm = FALSE)
 }
 \arguments{
   \item{query}{GRanges object representing genomic regions
-  (genes) to be averaged.} \item{subject}{A GenoSet object
-  or derivative} \item{assay.element}{character, name of
-  element in assayData to use to extract data} \item{na.rm}
-  {scalar logical, ignore NAs?}
+  (genes) to be averaged.} \item{subject}{A GenoSet object or
+  derivative} \item{assay.element}{character, name of element
+  in assayData to use to extract data} \item{na.rm}{scalar
+  logical, ignore NAs?}
 }
 \value{
 numeric matrix of features in each range averaged by sample

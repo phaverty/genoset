@@ -8,8 +8,8 @@ segs2RleDataFrame(seg.list, locs)
 }
 \arguments{
   \item{seg.list}{list, list of data frames, one per sample,
-  each is result from CBS} \item{locs}{locData from a
-  GenoSet object}
+  each is result from CBS} \item{locs}{locData from a GenoSet
+  object}
 }
 \value{
 RleDataFrame with nrows same as locs and one column for each

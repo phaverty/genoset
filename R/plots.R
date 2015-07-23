@@ -42,7 +42,7 @@
 ##' @param pch character or numeric, printing character, see points
 ##' @param xlim integer, length two, bounds for genome positions. Used in conjunction with "chr" to subset data for plotting.
 ##' @param ... Additional plotting args
-##' @return nothing
+##' @return TRUE
 ##' @export genoPlot
 ##' @family "genome plots"
 ##' @examples
@@ -62,7 +62,7 @@ setMethod("genoPlot",c(x="numeric",y="numeric"),
             } else {
               points(x,y,col=col,...)
             }
-            return(invisible())
+            return(invisible(TRUE))
           })
 
 ##' @rdname genoPlot-methods
@@ -82,7 +82,7 @@ setMethod("genoPlot", c(x="numeric",y="Rle"),
             loc.start = x[loc.start.indices]
             seg.mean = runValue(y)
             segments(loc.start, seg.mean, loc.end, seg.mean, col=col, lwd=lwd)
-            return(invisible())
+            return(invisible(TRUE))
           })
 
 ##' @rdname genoPlot-methods

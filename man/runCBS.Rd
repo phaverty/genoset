@@ -11,18 +11,17 @@ runCBS(data, locs, return.segs = FALSE, n.cores = 1, smooth.region = 2,
 \arguments{
   \item{data}{numeric matrix with continuous data in one
   or more columns} \item{locs}{GenomicRanges, like locData
-  slot of GenoSet} \item{return.segs}{logical, if true
-  list of segment data.frames return, otherwise a DataFrame
-  of Rle vectors. One Rle per sample.} \item{n.cores}
-  {numeric, number of cores to ask mclapply to use}
-  \item{smooth.region}{number of positions to left and
-  right of individual positions to consider when smoothing
-  single point outliers} \item{outlier.SD.scale}{number
-  of SD single points must exceed smooth.region to be
-  considered an outlier} \item{smooth.SD.scale}{floor used
-  to reset single point outliers} \item{trim}{fraction of
-  sample to smooth} \item{alpha}{pvalue cutoff for calling a
-  breakpoint}
+  slot of GenoSet} \item{return.segs}{logical, if true list
+  of segment data.frames return, otherwise a DataFrame of
+  Rle vectors. One Rle per sample.} \item{n.cores}{numeric,
+  number of cores to ask mclapply to use} \item{smooth.region}
+  {number of positions to left and right of individual
+  positions to consider when smoothing single point outliers}
+  \item{outlier.SD.scale}{number of SD single points
+  must exceed smooth.region to be considered an outlier}
+  \item{smooth.SD.scale}{floor used to reset single point
+  outliers} \item{trim}{fraction of sample to smooth}
+  \item{alpha}{pvalue cutoff for calling a breakpoint}
 }
 \value{
 data frame of segments from CBS

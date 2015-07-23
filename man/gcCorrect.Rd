@@ -7,11 +7,10 @@
 gcCorrect(ds, gc, retain.mean = TRUE)
 }
 \arguments{
-  \item{ds}{numeric matrix of copynumber or log2ratio
-  values, samples in columns} \item{gc}{numeric vector,
-  GC percentage for each row of ds, must not have NAs}
-  \item{retain.mean}{logical, center on zero or keep same
-  mean?}
+  \item{ds}{numeric matrix of copynumber or log2ratio values,
+  samples in columns} \item{gc}{numeric vector, GC percentage
+  for each row of ds, must not have NAs} \item{retain.mean}
+  {logical, center on zero or keep same mean?}
 }
 \value{
 numeric matrix, residuals of ds regressed on gc

@@ -15,8 +15,8 @@ rangeSegMeanLength(range.gr, segs)
 }
 \arguments{
   \item{range.gr}{GRanges, genome regions of interest,
-  usually genes} \item{segs}{data.frame of segments, like
-  from segTable, or a list of these}
+  usually genes} \item{segs}{data.frame of segments, like from
+  segTable, or a list of these}
 }
 \value{
 named vector of lengths, one per item in range.gr, or a

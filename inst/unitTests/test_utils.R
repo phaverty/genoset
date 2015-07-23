@@ -103,3 +103,13 @@ test_cn2lr <- function() {
   checkException( cn2lr(cn.df, 1:8), "Ploidy and cn must match in size", silent=TRUE)
 
 }
+
+test_modeCenter <- function() {
+    x = matrix( c(1, 1, 2, 2, 2, 2, 3, 2, 1), ncol=3 )
+    x2 = matrix( c(0, 0, 1, 0, 0, 0, 1, 0, -1), ncol=3 )
+    checkEquals( modeCenter( x ), x2, tolerance=0.05 )
+}
+
+test_lr2cn <- function() {
+    checkEquals( lr2cn(c(-1, 0, 1)), c(1, 2, 4) )
+}

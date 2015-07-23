@@ -9,18 +9,17 @@
 }
 \arguments{
   \item{x}{RleDataFrame} \item{bounds}{IRanges or matrix,
-  views on every Rle. If \code{bounds} is a matrix,
-  the first two columns are used as as the starts and
-  stops. Names for the ranges are taken from rownames
-  of the matrix. Such a matrix can be constructed with
-  \code{boundingIndicesByChr}.} \item{na.rm}{scalar
-  logical, ignore NAs in calculations?} \item{simplify}
-  {scalar logical, simplify result? For a single view,
-  a vector, otherwise a matrix with one row per view.}
-  \item{RLEFUN}{function, internal rle view summary function
-  like .rle_range_means} \item{FUN.TYPE}{scalar character,
-  the storage mode for the returned vector or matrix (when
-  simplify==TRUE).}
+  views on every Rle. If \code{bounds} is a matrix, the first
+  two columns are used as as the starts and stops. Names for
+  the ranges are taken from rownames of the matrix. Such a
+  matrix can be constructed with \code{boundingIndicesByChr}.}
+  \item{na.rm}{scalar logical, ignore NAs in calculations?}
+  \item{simplify}{scalar logical, simplify result? For a
+  single view, a vector, otherwise a matrix with one row per
+  view.} \item{RLEFUN}{function, internal rle view summary
+  function like .rle_range_means} \item{FUN.TYPE}{scalar
+  character, the storage mode for the returned vector or
+  matrix (when simplify==TRUE).}
 }
 \value{
 With \code{simplify == TRUE}, a vector for single view or
