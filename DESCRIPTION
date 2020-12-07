@@ -5,7 +5,7 @@ Title: Provides classes similar to ExpressionSet for copy number
 Version: 1.23.5
 Date: 2015-07-22
 Author: Peter M. Haverty
-Maintainer: Peter M. Haverty <phaverty@gene.com>
+Maintainer: Peter M. Haverty <peterhaverty@alumni.ucdavis.edu>
 Description: Load, manipulate, and plot copynumber and BAF data.
     GenoSet class extends eSet by adding a "locData" slot for a
     GRanges object. This object contains feature
