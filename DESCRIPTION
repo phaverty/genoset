@@ -55,3 +55,4 @@ Collate:
 VignetteBuilder: knitr
 URL: https://github.com/phaverty/genoset
 Packaged: 2014-10-08 19:15:54 UTC; dtenenba
+RoxygenNote: 7.1.1

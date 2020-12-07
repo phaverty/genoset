@@ -5,7 +5,7 @@ NULL
 ##' @exportClass RleDataFrame
 setClass("RleDataFrame",
          representation(
-           rownames = "characterORNULL",
+           rownames = "character_OR_NULL",
            nrows = "integer"
            ),
          prototype(rownames = NULL,

@@ -23,7 +23,7 @@
 ##'
 ##' @importMethodsFrom GenomicRanges names "names<-" length width
 ##' @importMethodsFrom Biobase annotation fData featureNames "featureNames<-" phenoData sampleNames "sampleNames<-"
-##' @importMethodsFrom IRanges as.data.frame as.list as.matrix cbind colnames "colnames<-" elementLengths end findOverlaps gsub
+##' @importMethodsFrom IRanges as.data.frame as.list as.matrix cbind colnames "colnames<-" elementNROWS end findOverlaps gsub
 ##' @importMethodsFrom IRanges intersect lapply mean nrow order ranges rownames
 ##'
 ##' @importFrom Biobase assayDataElement assayDataElementNames assayDataElementReplace assayDataNew annotatedDataFrameFrom
@@ -423,17 +423,17 @@ setMethod("names", "GenoSet", function(x) {
   return( assayDataElementNames(x) )
 } )
 
-##' Get elementLengths from locData slot
+##' Get elementNROWS from locData slot
 ##'
-##' Get elementLengths from locData slot
+##' Get elementNROWS from locData slot
 ##' @param x GenoSet
 ##' @return character
-##' @exportMethod elementLengths
-##' @rdname elementLengths-methods
-setMethod("elementLengths", "GenoSet", function(x) { return( elementLengths(locData(x)) ) } )
+##' @exportMethod elementNROWS
+##' @rdname elementNROWS-methods
+setMethod("elementNROWS", "GenoSet", function(x) { return( elementNROWS(locData(x)) ) } )
 
-##' @rdname elementLengths-methods
-setMethod("elementLengths", "GenomicRanges", function(x) {
+##' @rdname elementNROWS-methods
+setMethod("elementNROWS", "GenomicRanges", function(x) {
   if ( any(duplicated(runValue(seqnames(x)))) ) {  stop("GenomicRanges not ordered by chromosome.") }
   return( structure(runLength(seqnames(x)),names=as.character(runValue(seqnames(x)))) )
 })
@@ -721,7 +721,7 @@ setGeneric("chrIndices", function(object,chr=NULL) standardGeneric("chrIndices")
 ##' @rdname chrIndices-methods
 setMethod("chrIndices", signature(object="GenoSetOrGenomicRanges"),
           function(object,chr=NULL) {
-            object.lengths = elementLengths(object)
+            object.lengths = elementNROWS(object)
             object.lengths = object.lengths[ object.lengths > 0 ]
             chr.last = cumsum(object.lengths)
             chr.last = chr.last[ chr.last > 0 ]

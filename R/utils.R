@@ -215,7 +215,6 @@ calcGC <- function(object, bsgenome, expand=1e6, bases=c("G", "C")) {
 ##' http://www.bioconductor.org/help/course-materials/2012/useR2012/Bioconductor-tutorial.pdf.
 ##' Values are as.integer( 1e4 * fraction ) for space reasons.
 ##' @param dna BSgenome or DNAStringSet
-##' @param window scalar integer, calculate GC content in a sliding (by one base) window of this size.
 ##' @return SimpleRleList, integer 1e4 * GC fraction, chromosomes 1:22, X and Y
 ##' @examples
 ##' \dontrun{ library(BSgenome.Hsapiens.UCSC.hg19) }
