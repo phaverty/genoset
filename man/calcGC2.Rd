@@ -8,8 +8,6 @@ calcGC2(dna)
 }
 \arguments{
 \item{dna}{BSgenome or DNAStringSet}
-
-\item{window}{scalar integer, calculate GC content in a sliding (by one base) window of this size.}
 }
 \value{
 SimpleRleList, integer 1e4 * GC fraction, chromosomes 1:22, X and Y

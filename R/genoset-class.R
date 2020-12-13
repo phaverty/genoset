@@ -682,8 +682,7 @@ setMethod("chrInfo", signature(object="GenoSetOrGenomicRanges"),
             if (is(object, "GenomicRanges") && !any(is.na(seqlengths(object)))) {
               max.val = seqlengths(object)
             } else {
-              chr.ind=chrIndices(object)
-              max.val = aggregate(end(object), start=chr.ind[,1], end=chr.ind[,2], FUN=max)
+              max.val = unlist(tapply(end(object), max))
             }
             if (length(max.val) == 1) {
               names(max.val) = chrNames(object)
