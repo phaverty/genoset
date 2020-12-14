@@ -171,13 +171,13 @@ rangeColMeans <- function(x, all.indices) {
   rangeMeans(x, all.indices, na.rm=TRUE)
 }
 
-### Internal methods to get directly to summary functions, using Views, but skipping trim
-.rle_view_sums <- function(x, na.rm) { .Call("RleViews_viewSums", x, na.rm, PACKAGE = "IRanges") }
-.rle_view_means <- function(x, na.rm) { .Call("RleViews_viewMeans", x, na.rm, PACKAGE = "IRanges") }
-.rle_view_mins <- function(x, na.rm) { .Call("RleViews_viewMins", x, na.rm, PACKAGE = "IRanges") }
-.rle_view_maxs <- function(x, na.rm) { .Call("RleViews_viewMaxs", x, na.rm, PACKAGE = "IRanges") }
-.rle_view_which_mins <- function(x, na.rm) { .Call("RleViews_viewWhichMins", x, na.rm, PACKAGE = "IRanges") }
-.rle_view_which_maxs <- function(x, na.rm) { .Call("RleViews_viewWhichMaxs", x, na.rm, PACKAGE = "IRanges") }
+### Internal methods to get directly to summary functions, using Views
+.rle_view_sums <- function(x, na.rm) { .Call2("C_viewSums_RleViews", IRanges::trim(x), na.rm, PACKAGE = "IRanges") }
+.rle_view_means <- function(x, na.rm) { .Call2("C_viewMeans_RleViews", IRanges::trin(x), na.rm, PACKAGE = "IRanges") }
+.rle_view_mins <- function(x, na.rm) { .Call2("C_viewMins_RleViews", IRanges::trim(x), na.rm, PACKAGE = "IRanges") }
+.rle_view_maxs <- function(x, na.rm) { .Call2("C_viewMaxs_RleViews", IRanges::trim(x), na.rm, PACKAGE = "IRanges") }
+.rle_view_which_mins <- function(x, na.rm) { .Call2("C_viewWhichMins_RleViews", IRanges::trim(x), na.rm, PACKAGE = "IRanges") }
+.rle_view_which_maxs <- function(x, na.rm) { .Call2("C_viewWhichMaxs_RleViews", IRanges::trim(x), na.rm, PACKAGE = "IRanges") }
 
 ### Internal methods to get directly to summary functions, skipping trim and Views
 .rle_range_means <- function(start, end, values, lengths, na.rm) {
